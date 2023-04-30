@@ -14,7 +14,7 @@ public:
 	double* V = nullptr;
 
 	int n = 0;
-	static double residuum;
+	static double docelowaNorma;
 
 	Macierz(int rows, int cols);
 	Macierz(int rows);
@@ -22,7 +22,7 @@ public:
 
 	void Drukuj();
 	void UstawDiagonale(double a1, double a2, double a3, int rozmiar);
-	void StworzMacierzeLUD(Macierz*& L, Macierz*& U, Macierz*& D);
+	//void StworzMacierzeLUD(Macierz*& L, Macierz*& U, Macierz*& D);
 	void InicjalizujMacierz(int rows, int cols, double wartosc);
 	void InicjalizujWektor(int rows, double wartosc);
 
@@ -30,8 +30,9 @@ public:
 	static Macierz*& Dodawanie(Macierz*& A, Macierz*& B);
 	static Macierz*& MnozeniePrzezWektor(Macierz*& A, Macierz*& V);
 	static Macierz*& MnozenieMacierzy(Macierz*& A, Macierz*& B);
+	Macierz*& RazyMinusJeden();
 
-	void Jacobi(Macierz*& B, Macierz*& X, Macierz*& R);
+	Macierz*& Jacobi(Macierz*& B);
 	void GaussSeidl();
 	void faktoryzacjaLU();
 

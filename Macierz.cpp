@@ -3,7 +3,7 @@
 
 using std::cout;
 
-double Macierz::residuum = 1e-9;
+double Macierz::docelowaNorma = 1e-9;
 
 Macierz::Macierz(int rows, int cols)
 {
@@ -65,39 +65,88 @@ void Macierz::InicjalizujWektor(int rows, double wartosc)
     }
 }
 
-void Macierz::StworzMacierzeLUD(Macierz*& L, Macierz*& U, Macierz*& D)
+//void Macierz::StworzMacierzeLUD(Macierz*& L, Macierz*& U, Macierz*& D)
+//{
+//    for (int i = 0; i < this->n; i++)
+//    {
+//        for (int j = 0; j < this->n; j++)
+//        {
+//            if (i > j)
+//            {
+//                L->M[i][j] = this->M[i][j];
+//            }
+//            else if (i < j)
+//            {
+//                U->M[i][j] = this->M[i][j];
+//            }
+//            else
+//            {
+//                D->M[i][j] = this->M[i][j];
+//            }
+//        }
+//    }
+//}
+
+Macierz*& Macierz::Jacobi(Macierz*& B)
 {
-    for (int i = 0; i < this->n; i++)
+    int iteracje = 0;
+    double norm = 0.0;
+    Macierz * Xprev = new Macierz(this->n);
+    Macierz * X = new Macierz(this->n);
+    X->InicjalizujWektor(this->n, 1);
+
+    Macierz * Residuum = new Macierz(this->n);
+    Macierz* A = this;
+
+    Xprev->InicjalizujWektor(this->n, 1);
+
+    do
     {
-        for (int j = 0; j < this->n; j++)
+        iteracje++;
+        for (int i = 0; i < A->n; i++)
         {
-            if (i > j)
+            double suma = 0;
+
+            for (int j = 0; j < A->n; j++)
             {
-                L->M[i][j] = this->M[i][j];
-            }
-            else if (i < j)
-            {
-                U->M[i][j] = this->M[i][j];
-            }
-            else
-            {
-                D->M[i][j] = this->M[i][j];
-            }
+                if (j != i)
+                {
+                    suma -= A->M[i][j] * Xprev->V[j];
+                }
+            }      
+            X->V[i] = (B->V[i] + suma) / A->M[i][i];
+
         }
-    }
-}
+        // liczymy residuum i norm
+        Residuum = Macierz::MnozeniePrzezWektor(A, X);
 
-void Macierz::Jacobi(Macierz*& B, Macierz*& X, Macierz*& Wynik)
-{
-    Macierz* L = new Macierz(this->n, this->n);
-    Macierz* U = new Macierz(this->n, this->n);
-    Macierz* D = new Macierz(this->n, this->n);
+        for (int i = 0; i < A->n; i++)
+        {
+            Residuum->V[i] -= B->V[i];
+        }
 
-    this->StworzMacierzeLUD(L, U, D);
+        for (int i = 0; i < this->n; i++)
+        {
+            Xprev->V[i] = X->V[i];
+        }
 
-    L->Drukuj();
-    U->Drukuj();
-    D->Drukuj();
+        double suma = 0.0;
+        for (int i = 0; i < this->n; i++)
+        {
+            suma += pow(Residuum->V[i], 2);
+        }
+        norm = sqrt(suma);
+
+        if (iteracje > 10000) break;
+    } while (norm > Macierz::docelowaNorma);
+
+    cout << "iteracje: " << iteracje << "\n";
+
+    return X;
+    ///exp1 = -D\(L + U)
+    ///exp2 = D\b;
+    /// 
+    /// norma to bêdzie pierwiastek z sumy kwadratów wektora residuum
 }
 
 
@@ -144,7 +193,6 @@ Macierz*& Macierz::MnozenieMacierzy(Macierz*& A, Macierz*& B)
 
     return C;
 }
-
 Macierz*& Macierz::MnozeniePrzezWektor(Macierz*& A, Macierz*& V)
 {
     Macierz* C = new Macierz(A->n);
@@ -164,7 +212,35 @@ Macierz*& Macierz::MnozeniePrzezWektor(Macierz*& A, Macierz*& V)
 
     return C;
 }
+Macierz*& Macierz::RazyMinusJeden()
+{
 
+    Macierz* C;
+
+    if (this->typ == macierz)
+    {   
+        C = new Macierz(this->n, this->n);
+
+        for (int i = 0;i<this->n; i++)
+        {
+            for (int j = 0; j < this->n; j++)
+            {
+                C->M[i][j] = -this->M[i][j];
+            }
+        }
+    }
+    else
+    {
+        C = new Macierz(this->n);
+
+        for (int j = 0; j < this->n; j++)
+        {
+            C->V[j] = -this->V[j];
+        }
+    }
+
+    return C;
+}
 
 void Macierz::faktoryzacjaLU()
 {
