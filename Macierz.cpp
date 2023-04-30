@@ -134,7 +134,7 @@ Macierz*& Macierz::MnozenieMacierzy(Macierz*& A, Macierz*& B)
             double s = 0;
 
             for (int k = 0; k < B->n; k++)
-            {
+{
                 s += A->M[i][k] * B->M[k][j];
             }
 
@@ -151,7 +151,7 @@ Macierz*& Macierz::MnozeniePrzezWektor(Macierz*& A, Macierz*& V)
 
 
         for (int i = 0; i < A->n; i++)
-        {
+{
             double s = 0;
 
             for (int k = 0; k < V->n; k++)
