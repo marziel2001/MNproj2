@@ -98,7 +98,6 @@ void Macierz::Jacobi(Macierz*& B, Macierz*& X, Macierz*& Wynik)
     L->Drukuj();
     U->Drukuj();
     D->Drukuj();
-
 }
 
 
@@ -123,21 +122,48 @@ Macierz*& Macierz::Dodawanie(Macierz*& A, Macierz*& B)
 
     return C;
 }
-Macierz*& Macierz::Mnozenie(Macierz*& A, Macierz*& B)
+Macierz*& Macierz::MnozenieMacierzy(Macierz*& A, Macierz*& B)
 {
     Macierz* C = new Macierz(A->n, A->n);
 
-    for (int i = 0; i < A->n; i++)
-    {
-        for (int j = 0; j < A->n; j++)
+
+    for (int j = 0; j < B->n; j++)
+    {  
+        for (int i = 0; i < A->n; i++)
         {
-            
+            double s = 0;
+
+            for (int k = 0; k < B->n; k++)
+            {
+                s += A->M[i][k] * B->M[k][j];
+            }
+
+            C->M[i][j] = s;
         }
     }
 
     return C;
 }
 
+Macierz*& Macierz::MnozeniePrzezWektor(Macierz*& A, Macierz*& V)
+{
+    Macierz* C = new Macierz(A->n);
+
+
+        for (int i = 0; i < A->n; i++)
+        {
+            double s = 0;
+
+            for (int k = 0; k < V->n; k++)
+            {
+                s += A->M[i][k] * V->V[k];
+            }
+
+            C->V[i] = s;
+        }
+
+    return C;
+}
 
 
 void Macierz::faktoryzacjaLU()

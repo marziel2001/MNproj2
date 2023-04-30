@@ -32,7 +32,6 @@ int main()
 
     A->Jacobi(B, X, Wynik);
 
-    
 
     return 0;
 }

@@ -28,7 +28,8 @@ public:
 
 	// Dzialania
 	static Macierz*& Dodawanie(Macierz*& A, Macierz*& B);
-	static Macierz*& Mnozenie(Macierz*& A, Macierz*& B);
+	static Macierz*& MnozeniePrzezWektor(Macierz*& A, Macierz*& V);
+	static Macierz*& MnozenieMacierzy(Macierz*& A, Macierz*& B);
 
 	void Jacobi(Macierz*& B, Macierz*& X, Macierz*& R);
 	void GaussSeidl();
