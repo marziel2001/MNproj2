@@ -18,6 +18,7 @@ public:
 
 	Macierz(int rows, int cols);
 	Macierz(int rows);
+	Macierz(const Macierz& const N);
 	~Macierz();
 
 	void Drukuj();
@@ -32,9 +33,12 @@ public:
 	static Macierz*& MnozenieMacierzy(Macierz*& A, Macierz*& B);
 	Macierz*& RazyMinusJeden();
 
-	Macierz*& Jacobi(Macierz*& B);
-	void GaussSeidl();
-	void faktoryzacjaLU();
+	Macierz*& Jacobi( Macierz* B);
+	Macierz*& GaussSeidl(Macierz*& B);
+	Macierz*& faktoryzacjaLU(Macierz*& B);
+	static Macierz*& Residuum(Macierz*& A, Macierz*& X, Macierz*& B);
+
+	double LiczNormeRes(Macierz*& R);
 
 private:
 	typ typ = macierz;

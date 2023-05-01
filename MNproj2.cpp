@@ -15,17 +15,24 @@ int main()
     
     // utworzono macierz zer "A" - o rozmiarah N x N
     A->UstawDiagonale(A1, A2, A3, N);
-    //A->Drukuj();
 
     Macierz* B = new Macierz(N); 
-    B->V[B->n - 1] = sin(N * 2);
-    //B->Drukuj();
-
-    Macierz* X = new Macierz(N);
-    //X->Drukuj();   
+    for(int i = 0; i<N; i++) B->V[i] = sin(i * 2);
     
-    Macierz* Wynik = A->Jacobi(B);
-    Wynik->Drukuj();
+
+    cout << "\n\n\n=============== Jacobi =================\n";
+    Macierz* WynikJ = A->Jacobi(B);
+    //WynikJ->Drukuj();
+
+
+    cout << "\n\n\n=============== GaussSeidl =================\n";
+    Macierz* WynikGS = A->GaussSeidl(B);
+    //WynikGS->Drukuj();
+
+
+    cout << "\n\n\n=============== FaktoryzacjaLU =================\n";
+    Macierz* WynikLU = A->faktoryzacjaLU(B);
+    //WynikGS->Drukuj();
 
     return 0;
 }
